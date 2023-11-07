@@ -32,11 +32,11 @@
     <h1>Session App</h1>
     <div class="mb-3">
         <label for="txt-email" class="form-label">Email address</label>
-        <input required type="email" class="form-control text-center" id="txt-email" placeholder="Enter your email here">
+        <input name="email" required type="email" class="form-control text-center ${denied ? 'is-invalid':''}" id="txt-email" placeholder="Enter your email here">
     </div>
     <div class="mb-3">
         <label for="txt-password" class="form-label">Password</label>
-        <input required type="password" class="form-control text-center" id="txt-password" placeholder="Enter your password here">
+        <input name="password" required minlength="4" maxlength="10" type="password" class="form-control text-center ${denied ? 'is-invalid':''}" id="txt-password" placeholder="Enter your password here">
     </div>
     <div>
         <button class="btn btn-primary">Sign In</button>
@@ -45,11 +45,25 @@
         </p>
     </div>
 </form>
-<c:if test="${param.get('created')}">
-    <div class="position-fixed toast show align-items-center text-bg-success border-0 top-0 start-50 translate-middle-x" role="alert" aria-live="assertive" aria-atomic="true">
+<c:if test="${error or denied or param.get('created')}">
+    <div class="${(error or denied) ? 'text-bg-danger':'text-bg-success'} position-fixed toast show align-items-center border-0 top-0 start-50 translate-middle-x" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="d-flex">
             <div class="toast-body">
-                Your account has been created successfully
+                <c:choose>
+                    <c:when test="${param.get('created')}">
+                        Your account has been created successfully
+                    </c:when>
+                    <c:when test="${error}">
+                        Something went wrong, try again!
+                    </c:when>
+                    <c:when test="${denie}">
+                        Invalid login credential,please try again
+                    </c:when>
+                </c:choose>
+
+
+
+
             </div>
             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
